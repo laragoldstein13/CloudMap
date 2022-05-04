@@ -10,7 +10,7 @@
     Installs dotnet cli. If dotnet installation already exists in the given directory
     it will update it only if the requested version differs from the one already installed.
 .PARAMETER Channel
-    Default: LTS
+    Default: 5.0
     Download from the Channel specified. Possible values:
     - Current - most current release
     - LTS - most current supported release
@@ -20,14 +20,14 @@
           examples: 5.0.1xx, 5.0.2xx
           Supported since 5.0 release
     Note: The version parameter overrides the channel parameter when any version other than 'latest' is used.
-.PARAMETER Quality
+.PARAMETER Signed
     Download the latest build of specified quality in the channel. The possible values are: daily, signed, validated, preview, GA.
     Works only in combination with channel. Not applicable for current and LTS channels and will be ignored if those channels are used. 
     For SDK use channel in A.B.Cxx format: using quality together with channel in A.B format is not supported.
     Supported since 5.0 release.
     Note: The version parameter overrides the channel parameter when any version other than 'latest' is used, and therefore overrides the quality.     
 .PARAMETER Version
-    Default: latest
+    Default: 5.0.14
     Represents a build version on specific channel. Possible values:
     - latest - most latest build on specific channel
     - 3-part version in a format A.B.C - represents specific version of build
@@ -94,12 +94,12 @@
 #>
 [cmdletbinding()]
 param(
-   [string]$Channel="LTS",
-   [string]$Quality,
-   [string]$Version="Latest",
+   [string]$Channel="5.0",
+   [string]$Signed,
+   [string]$Version="5.0.14",
    [switch]$Internal,
    [string]$JSonFile,
-   [Alias('i')][string]$InstallDir="<auto>",
+   [Alias('i')][string]$InstallDir="%USERPROFILE%\dotnet",
    [string]$Architecture="<auto>",
    [string]$Runtime,
    [Obsolete("This parameter may be removed in a future version of this script. The recommended alternative is '-Runtime dotnet'.")]
