@@ -19,7 +19,13 @@
     - 3-part version in a format A.B.Cxx - represents a specific SDK release
           examples: 5.0.1xx, 5.0.2xx
           Supported since 5.0 release
-    Note: The version parameter overrides the channel parameter when any version other than 'latest' is used.   
+    Note: The version parameter overrides the channel parameter when any version other than 'latest' is used.
+.PARAMETER Quality
+    Download the latest build of specified quality in the channel. The possible values are: daily, signed, validated, preview, GA.
+    Works only in combination with channel. Not applicable for current and LTS channels and will be ignored if those channels are used. 
+    For SDK use channel in A.B.Cxx format: using quality together with channel in A.B format is not supported.
+    Supported since 5.0 release.
+    Note: The version parameter overrides the channel parameter when any version other than 'latest' is used, and therefore overrides the quality.     
 .PARAMETER Version
     Default: 5.0.14
     Represents a build version on specific channel. Possible values:
@@ -89,10 +95,11 @@
 [cmdletbinding()]
 param(
    [string]$Channel="5.0",
+   [string]$Quality,
    [string]$Version="5.0.14",
    [switch]$Internal,
    [string]$JSonFile,
-   [Alias('i')][string]$InstallDir="%USERPROFILE%\dotnet",
+   [Alias('i')][string]$InstallDir="<auto>",
    [string]$Architecture="<auto>",
    [string]$Runtime,
    [Obsolete("This parameter may be removed in a future version of this script. The recommended alternative is '-Runtime dotnet'.")]
@@ -232,7 +239,19 @@ function ValidateFeedCredential([string] $FeedCredential)
 
     return $FeedCredential
 }
+function Get-NormalizedQuality([string]$Quality) {
+    Say-Invocation $MyInvocation
 
+    if ([string]::IsNullOrEmpty($Quality)) {
+        return ""
+    }
+
+    switch ($Quality) {
+        { @("daily", "signed", "validated", "preview") -contains $_ } { return $Quality.ToLowerInvariant() }
+        #ga quality is available without specifying quality, so normalizing it to empty
+        { $_ -eq "ga" } { return "" }
+        default { throw "'$Quality' is not a supported value for -Quality option. Supported values are: daily, signed, validated, preview, ga. If you think this is a bug, report it at https://github.com/dotnet/install-scripts/issues." }
+    }
 }
 
 function Get-NormalizedChannel([string]$Channel) {
