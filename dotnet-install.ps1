@@ -232,19 +232,7 @@ function ValidateFeedCredential([string] $FeedCredential)
 
     return $FeedCredential
 }
-function Get-NormalizedQuality([string]$Quality) {
-    Say-Invocation $MyInvocation
 
-    if ([string]::IsNullOrEmpty($Quality)) {
-        return ""
-    }
-
-    switch ($Quality) {
-        { @("daily", "signed", "validated", "preview") -contains $_ } { return $Quality.ToLowerInvariant() }
-        #ga quality is available without specifying quality, so normalizing it to empty
-        { $_ -eq "ga" } { return "" }
-        default { throw "'$Quality' is not a supported value for -Quality option. Supported values are: daily, signed, validated, preview, ga. If you think this is a bug, report it at https://github.com/dotnet/install-scripts/issues." }
-    }
 }
 
 function Get-NormalizedChannel([string]$Channel) {
