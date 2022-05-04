@@ -19,13 +19,7 @@
     - 3-part version in a format A.B.Cxx - represents a specific SDK release
           examples: 5.0.1xx, 5.0.2xx
           Supported since 5.0 release
-    Note: The version parameter overrides the channel parameter when any version other than 'latest' is used.
-.PARAMETER Quality
-    Download the latest build of specified quality in the channel. The possible values are: daily, signed, validated, preview, GA.
-    Works only in combination with channel. Not applicable for current and LTS channels and will be ignored if those channels are used. 
-    For SDK use channel in A.B.Cxx format: using quality together with channel in A.B format is not supported.
-    Supported since 5.0 release.
-    Note: The version parameter overrides the channel parameter when any version other than 'latest' is used, and therefore overrides the quality.     
+    Note: The version parameter overrides the channel parameter when any version other than 'latest' is used.   
 .PARAMETER Version
     Default: 5.0.14
     Represents a build version on specific channel. Possible values:
@@ -95,7 +89,6 @@
 [cmdletbinding()]
 param(
    [string]$Channel="5.0",
-   [string]$Quality,
    [string]$Version="5.0.14",
    [switch]$Internal,
    [string]$JSonFile,
